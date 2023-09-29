@@ -31,14 +31,19 @@ class SafariBaseIE(InfoExtractor):
     def _login(self):
         username, password = self._get_login_info()
         if username is None:
+            self.to_screen('Not Logged in')
             return
-
+        self.to_screen('Using user {}'.format(username))
         _, urlh = self._download_webpage_handle(
             'https://learning.oreilly.com/accounts/login-check/', None,
             'Downloading login page')
 
         def is_logged(urlh):
-            return 'learning.oreilly.com/home/' in urlh.geturl()
+            url = urlh.geturl()
+            parsed_url = compat_urlparse.urlparse(url)
+            return parsed_url.hostname.endswith('learning.oreilly.com') and (
+                parsed_url.path.startswith('/home/')
+                or (parsed_url.path == '/member/login/' and not parsed_url.query))
 
         if is_logged(urlh):
             self.LOGGED_IN = True
