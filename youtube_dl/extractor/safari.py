@@ -50,9 +50,13 @@ class SafariBaseIE(InfoExtractor):
             self.LOGGED_IN = True
             return
 
+        self.to_screen("YOU ARE NOT LOGGED IN!")
         redirect_url = urlh.geturl()
         parsed_url = compat_urlparse.urlparse(redirect_url)
+        self.to_screen(parsed_url)
         qs = compat_parse_qs(parsed_url.query)
+        for k in qs:
+            self.to_screen(k)
         next_uri = compat_urlparse.urljoin(
             'https://api.oreilly.com', qs['next'][0])
 
