@@ -40,6 +40,7 @@ class SafariBaseIE(InfoExtractor):
 
         def is_logged(urlh):
             url = urlh.geturl()
+            self.to_screen('NOTE THIS: {}'.format(url))
             parsed_url = compat_urlparse.urlparse(url)
             return parsed_url.hostname.endswith('learning.oreilly.com') and (
                 parsed_url.path.startswith('/home/')
